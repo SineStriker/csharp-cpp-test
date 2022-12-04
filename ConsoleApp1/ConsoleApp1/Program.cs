@@ -11,7 +11,7 @@ namespace ConsoleApp1
         public static void fun1()
         {
             var bar = MyLib.newBar(1, 2);
-            
+
             Console.WriteLine("[1]");
             Console.WriteLine($"Bar Addr: {(int)bar}");
             Console.WriteLine($"Foo Val2: {MyLib.getFooProp(bar)}");
@@ -41,6 +41,15 @@ namespace ConsoleApp1
             fun2();
 
             Console.WriteLine("Hello, World!");
+
+            int i = Console.Read();
+            Console.WriteLine(i + 1);
+            
+            
+            Console.WriteLine("FreeLibrary");
+
+            i = Console.Read();
+            Console.WriteLine(i + 1);
 
             return 0;
         }

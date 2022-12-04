@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{5001C755-354B-427D-918E-8492C230BC9F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvipResolver", "SvipResolver\SvipResolver.csproj", "{31CAC231-8F41-4BB8-A1E8-B97403346727}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{5001C755-354B-427D-918E-8492C230BC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5001C755-354B-427D-918E-8492C230BC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5001C755-354B-427D-918E-8492C230BC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31CAC231-8F41-4BB8-A1E8-B97403346727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31CAC231-8F41-4BB8-A1E8-B97403346727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31CAC231-8F41-4BB8-A1E8-B97403346727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31CAC231-8F41-4BB8-A1E8-B97403346727}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
