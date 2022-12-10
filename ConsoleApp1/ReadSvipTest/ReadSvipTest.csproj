@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="NAudio">
+        <HintPath>Libs\NAudio.dll</HintPath>
+      </Reference>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
+      </Reference>
+      <Reference Include="SingingTool.Const">
+        <HintPath>Libs\SingingTool.Const.dll</HintPath>
+      </Reference>
+      <Reference Include="SingingTool.Library">
+        <HintPath>Libs\SingingTool.Library.dll</HintPath>
+      </Reference>
+      <Reference Include="SingingTool.Model">
+        <HintPath>Libs\SingingTool.Model.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
