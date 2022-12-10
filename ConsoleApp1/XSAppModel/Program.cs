@@ -24,6 +24,43 @@ public static class Program
             return -1;
         }
 
+        // Correct line params
+        foreach (var track in model.trackList)
+        {
+            if (track is SingingTrack singingTrack)
+            {
+                if (singingTrack.editedPitchLine == null)
+                {
+                    singingTrack.editedPitchLine = new LineParam();
+                    singingTrack.editedPitchLine.setDefault();
+                }
+
+                if (singingTrack.editedVolumeLine == null)
+                {
+                    singingTrack.editedVolumeLine = new LineParam();
+                    singingTrack.editedVolumeLine.setDefault();
+                }
+
+                if (singingTrack.editedBreathLine == null)
+                {
+                    singingTrack.editedBreathLine = new LineParam();
+                    singingTrack.editedBreathLine.setDefault();
+                }
+
+                if (singingTrack.editedGenderLine == null)
+                {
+                    singingTrack.editedGenderLine = new LineParam();
+                    singingTrack.editedGenderLine.setDefault();
+                }
+
+                if (singingTrack.editedPowerLine == null)
+                {
+                    singingTrack.editedPowerLine = new LineParam();
+                    singingTrack.editedPowerLine.setDefault();
+                }
+            }
+        }
+
         // Print some information
         Console.WriteLine($"ProjectFilePath: {model.ProjectFilePath}");
         Console.WriteLine($"quantize: {model.quantize}");
@@ -73,11 +110,13 @@ public static class Program
         // Console.WriteLine("Successfully convert binary svip to json.");
 
         // Write svip back
-        var outputFilename = args.Length < 2 ? Path.GetFileNameWithoutExtension(filename) + "_back.svip" : args[1];
+        var outputFilename =
+            args.Length < 2 ? Path.GetFileNameWithoutExtension(filename) + "_back_dotnet.svip" : args[1];
         if (!WriteSvip(outputFilename, model))
         {
             return -1;
         }
+
         Console.WriteLine("Successfully write model to binary.");
         return 0;
     }
@@ -113,9 +152,11 @@ public static class Program
         if (model == null) // equivalent to `if (stream.Status != NrbfStream.StatusType.Ok)`
         {
             Console.WriteLine(stream.ErrorMessage);
-            return null;
         }
 
+        // Call dispose to free library
+        stream.Dispose();
+        
         return model;
     }
 
@@ -124,14 +165,16 @@ public static class Program
         // Write binary svip to byte array
         var stream = new NrbfStream();
         var bytes = stream.Write(model);
+
+        bool success = true;
         if (stream.Status != NrbfStream.StatusType.Ok)
         {
             Console.WriteLine(stream.ErrorMessage);
-            return false;
+            success = false;
         }
-
-        // Write to file
+        else
         {
+            // Write to file
             var fs = new FileStream(filename, FileMode.Create, FileAccess.Write);
             var writer = new BinaryWriter(fs);
             writer.Write("SVIP");
@@ -140,6 +183,9 @@ public static class Program
             writer.Flush();
         }
 
-        return true;
+        // Call dispose to free library
+        stream.Dispose();
+
+        return success;
     }
 }

@@ -189,31 +189,50 @@ internal static unsafe class NrbfLibrary
         public xs_app_model* model;
     };
 
+    private static int _referenceCount = 0;
+
+    /* Load or free libraries at correct time */
+    public static void Load()
+    {
+        if (_referenceCount == 0)
+        {
+            NrbfLibraryImpl.Init();
+        }
+
+        _referenceCount++;
+    }
+
+    public static void Unload()
+    {
+        _referenceCount--;
+        if (_referenceCount == 0)
+        {
+            NrbfLibraryImpl.Deinit();
+        }
+    }
+
     /* The APIs are not thread-safe, please use only one instance at any time. */
 
     /* Allocator */
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void* qnrbf_malloc(int size);
+    public static void* qnrbf_malloc(int size) => NrbfLibraryImpl.qnrbf_malloc_ptr(size);
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_free(void* data);
+    public static void qnrbf_free(void* data) => NrbfLibraryImpl.qnrbf_free_ptr(data);
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_memcpy(void* dst, void* src, int count);
+    public static void qnrbf_memcpy(void* dst, void* src, int count) =>
+        NrbfLibraryImpl.qnrbf_memcpy_ptr(dst, src, count);
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_memset(void* dst, int value, int count);
+    public static void qnrbf_memset(void* dst, int value, int count) =>
+        NrbfLibraryImpl.qnrbf_memset_ptr(dst, value, count);
 
     /* Context */
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static qnrbf_xstudio_context* qnrbf_xstudio_alloc_context();
+    public static qnrbf_xstudio_context* qnrbf_xstudio_alloc_context() =>
+        NrbfLibraryImpl.qnrbf_xstudio_alloc_context_ptr();
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_xstudio_free_context(qnrbf_xstudio_context* ctx);
+    public static void qnrbf_xstudio_free_context(qnrbf_xstudio_context* ctx) =>
+        NrbfLibraryImpl.qnrbf_xstudio_free_context_ptr(ctx);
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_xstudio_read(qnrbf_xstudio_context* @params);
+    public static void qnrbf_xstudio_read(qnrbf_xstudio_context* ctx) =>
+        NrbfLibraryImpl.qnrbf_xstudio_read_ptr(ctx);
 
-    [DllImport("qnrbf.dll", CallingConvention = CallingConvention.Cdecl)]
-    public extern static void qnrbf_xstudio_write(qnrbf_xstudio_context* ctx);
+    public static void qnrbf_xstudio_write(qnrbf_xstudio_context* ctx) => NrbfLibraryImpl.qnrbf_xstudio_write_ptr(ctx);
 }

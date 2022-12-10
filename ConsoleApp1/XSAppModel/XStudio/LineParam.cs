@@ -29,4 +29,14 @@ public class LineParam
      */
 
     public LinkedList<LineParamNode> nodeLinkedList;
+
+    /* LineParam property of a singing track cannot be null or empty,
+    * it should at least contain the following two magic point.
+    */
+    public void setDefault()
+    {
+        nodeLinkedList = new LinkedList<LineParamNode>();
+        nodeLinkedList.AddLast(new LineParamNode(-192000, 0));
+        nodeLinkedList.AddLast(new LineParamNode(1073741823, 0));
+    }
 }

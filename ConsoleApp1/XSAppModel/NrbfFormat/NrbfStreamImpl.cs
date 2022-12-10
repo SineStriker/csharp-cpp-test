@@ -542,7 +542,7 @@ internal unsafe class NrbfStreamImpl
                     // Save one
                     trackPtr = (NrbfLibrary.xs_track*)track;
                 }
-                
+
                 // Copy base
                 trackPtr->volume = item.volume;
                 trackPtr->pan = item.pan;

@@ -1,10 +1,31 @@
 ﻿namespace XSAppModel.NrbfFormat;
 
-public class NrbfStream
+public class NrbfStream : IDisposable
 {
+    private bool _disposed = false;
+
     public NrbfStream()
     {
+        // Load library
+        NrbfLibrary.Load();
+
         _impl = new NrbfStreamImpl();
+    }
+
+    ~NrbfStream()
+    {
+        Dispose();
+    }
+
+    public void Dispose()
+    {
+        if (!_disposed)
+        {
+            // Unload library
+            NrbfLibrary.Unload();
+
+            _disposed = true;
+        }
     }
 
     public XStudio.AppModel? Read(byte[] data)
