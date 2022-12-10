@@ -16,7 +16,7 @@ internal unsafe static class NrbfLibraryImpl
 
 
     /* Library attributes */
-    public static readonly string DllName = "qnrbf.dll";
+    public static readonly string DllName = "QNrbfFormat.dll";
 
     public static IntPtr DllPtr = IntPtr.Zero;
 
