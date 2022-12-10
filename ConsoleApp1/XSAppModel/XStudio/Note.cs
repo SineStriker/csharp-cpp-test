@@ -37,6 +37,8 @@ public class Note : IOverlappable
         NotePhoneInfo = null;
         Vibrato = null;
         VibratoPercentInfo = null;
+        lyric = "";
+        pronouncing = "";
     }
 
     /* Properties */

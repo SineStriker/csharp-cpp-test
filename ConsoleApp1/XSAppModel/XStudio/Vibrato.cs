@@ -26,7 +26,7 @@ public class VibratoPercentInfo
 
     public VibratoPercentInfo(float start, float end)
     {
-        startPercent = startPercent;
+        startPercent = start;
         endPercent = end;
     }
 

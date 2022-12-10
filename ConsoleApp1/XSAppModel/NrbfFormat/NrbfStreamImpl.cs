@@ -100,6 +100,7 @@ internal unsafe class NrbfStreamImpl
                     tempo.pos = inTempo->pos;
                     tempo.tempo = inTempo->tempo;
 
+                    // Save one
                     model.tempoList.Add(tempo);
 
                     node = node->next;
@@ -118,6 +119,7 @@ internal unsafe class NrbfStreamImpl
                     beat.barIndex = inBeat->barIndex;
                     beat.beatSize = new BeatSize(inBeat->beatSize.x, inBeat->beatSize.y);
 
+                    // Save one
                     model.beatList.Add(beat);
 
                     node = node->next;
@@ -134,7 +136,10 @@ internal unsafe class NrbfStreamImpl
                     while (node != null)
                     {
                         var inParam = (NrbfLibrary.xs_line_param*)node->data;
+
+                        // Save one
                         res.nodeLinkedList.AddLast(new LineParamNode(inParam->Pos, inParam->Value));
+
                         node = node->next;
                     }
 
@@ -191,38 +196,49 @@ internal unsafe class NrbfStreamImpl
                                 // Copy NotePhoneInfo
                                 if (inNote->NotePhoneInfo != null)
                                 {
+                                    var org = inNote->NotePhoneInfo;
+
+                                    // Save one
                                     note.NotePhoneInfo = new NotePhoneInfo(
-                                        inNote->NotePhoneInfo->HeadPhoneTimeInSec,
-                                        inNote->NotePhoneInfo->MidPartOverTailPartRatio);
+                                        org->HeadPhoneTimeInSec,
+                                        org->MidPartOverTailPartRatio);
                                 }
 
                                 // Copy Vibrato
                                 if (inNote->Vibrato != null)
                                 {
-                                    var inVibrato = inNote->Vibrato;
+                                    var org = inNote->Vibrato;
 
                                     var vibrato = new VibratoStyle();
-                                    vibrato.IsAntiPhase = inVibrato->IsAntiPhase;
-                                    if (inVibrato->ampLine != null)
-                                        vibrato.ampLine = createLineParam(inVibrato->ampLine);
-                                    if (inVibrato->freqLine != null)
-                                        vibrato.freqLine = createLineParam(inVibrato->freqLine);
+                                    vibrato.IsAntiPhase = org->IsAntiPhase;
+                                    if (org->ampLine != null)
+                                        vibrato.ampLine = createLineParam(org->ampLine);
+                                    if (org->freqLine != null)
+                                        vibrato.freqLine = createLineParam(org->freqLine);
+
+                                    // Save one
+                                    note.Vibrato = vibrato;
                                 }
 
                                 // Copy VibratoPercentInfo
                                 if (inNote->VibratoPercentInfo != null)
                                 {
+                                    var org = inNote->VibratoPercentInfo;
+
+                                    // Save one
                                     note.VibratoPercentInfo = new VibratoPercentInfo(
-                                        inNote->VibratoPercentInfo->startPercent,
-                                        inNote->VibratoPercentInfo->endPercent);
+                                        org->startPercent,
+                                        org->endPercent);
                                 }
 
+                                // Save one
                                 singingTrack.noteList.Add(note);
 
                                 noteNode = noteNode->next;
                             }
                         }
 
+                        // Save one
                         track = singingTrack;
                     }
                     else
@@ -236,6 +252,7 @@ internal unsafe class NrbfStreamImpl
                         instrumentTrack.OffsetInPos = inTrack->OffsetInPos;
                         instrumentTrack.InstrumentFilePath = from_xs_string(inTrack->InstrumentFilePath);
 
+                        // Save one
                         track = instrumentTrack;
                     }
 
@@ -246,6 +263,7 @@ internal unsafe class NrbfStreamImpl
                     track.mute = baseTrack->mute;
                     track.solo = baseTrack->solo;
 
+                    // Save one
                     model.trackList.Add(track);
 
                     node = node->next;
@@ -333,16 +351,6 @@ internal unsafe class NrbfStreamImpl
 
         // Copy track list
         {
-            var copy_track_base =
-                (ITrack @in, NrbfLibrary.xs_track* @out) =>
-                {
-                    @out->volume = @in.volume;
-                    @out->pan = @in.pan;
-                    @out->mute = @in.mute;
-                    @out->solo = @in.solo;
-                    copy_string(@in.name, &@out->name);
-                };
-
             var create_line_param_list =
                 (LineParam lineParam) =>
                 {
@@ -382,16 +390,13 @@ internal unsafe class NrbfStreamImpl
             var p = head;
             foreach (var item in model.trackList)
             {
-                void* trackPtr;
+                NrbfLibrary.xs_track* trackPtr;
 
                 if (item is SingingTrack singingTrack)
                 {
                     var track =
                         (NrbfLibrary.xs_singing_track*)NrbfLibrary.qnrbf_malloc(sizeof(NrbfLibrary.xs_singing_track));
-
-                    // Copy base
                     track->@base.track_type = NrbfLibrary.xs_track_type.SINGING;
-                    copy_track_base(singingTrack, &track->@base);
 
                     copy_string(singingTrack.AISingerId, &track->AISingerId);
                     track->needRefreshBaseMetadataFlag = singingTrack.needRefreshBaseMetadataFlag;
@@ -447,6 +452,7 @@ internal unsafe class NrbfStreamImpl
                                 info->HeadPhoneTimeInSec = org.HeadPhoneTimeInSec;
                                 info->MidPartOverTailPartRatio = org.MidPartOverTailPartRatio;
 
+                                // Save one
                                 note->NotePhoneInfo = info;
                             }
                             else
@@ -472,6 +478,7 @@ internal unsafe class NrbfStreamImpl
                                         ? null
                                         : create_line_param_list(org.freqLine);
 
+                                // Save one
                                 note->Vibrato = vibrato;
                             }
                             else
@@ -489,6 +496,7 @@ internal unsafe class NrbfStreamImpl
                                 info->startPercent = org.startPercent;
                                 info->endPercent = org.endPercent;
 
+                                // Save one
                                 note->VibratoPercentInfo = info;
                             }
                             else
@@ -514,7 +522,8 @@ internal unsafe class NrbfStreamImpl
                         }
                     }
 
-                    trackPtr = track;
+                    // Save one
+                    trackPtr = (NrbfLibrary.xs_track*)track;
                 }
                 else
                 {
@@ -522,10 +531,7 @@ internal unsafe class NrbfStreamImpl
                     var track =
                         (NrbfLibrary.xs_instrument_track*)NrbfLibrary.qnrbf_malloc(
                             sizeof(NrbfLibrary.xs_instrument_track));
-
-                    // Copy base
                     track->@base.track_type = NrbfLibrary.xs_track_type.INSTRUMENT;
-                    copy_track_base(instrumentTrack, &track->@base);
 
                     track->SampleRate = instrumentTrack.SampleRate;
                     track->SampleCount = instrumentTrack.SampleCount;
@@ -533,8 +539,16 @@ internal unsafe class NrbfStreamImpl
                     track->OffsetInPos = instrumentTrack.OffsetInPos;
                     copy_string(instrumentTrack.InstrumentFilePath, &track->InstrumentFilePath);
 
-                    trackPtr = track;
+                    // Save one
+                    trackPtr = (NrbfLibrary.xs_track*)track;
                 }
+                
+                // Copy base
+                trackPtr->volume = item.volume;
+                trackPtr->pan = item.pan;
+                trackPtr->mute = item.mute;
+                trackPtr->solo = item.solo;
+                copy_string(item.name, &trackPtr->name);
 
                 // Create node
                 var node = (NrbfLibrary.xs_node*)NrbfLibrary.qnrbf_malloc(sizeof(NrbfLibrary.xs_node));

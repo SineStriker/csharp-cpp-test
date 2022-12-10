@@ -149,6 +149,9 @@ public static class Program
                     equal(note1.NotePhoneInfo == null, note2.NotePhoneInfo == null, "NotePhoneInfo");
                     equal(note1.VibratoPercentInfo == null, note2.VibratoPercentInfo == null, "VibratoPercentInfo");
                     equal(note1.Vibrato == null, note2.Vibrato == null, "Vibrato Style");
+
+                    // Console.WriteLine($"{j} {note1.Vibrato == null} {note2.Vibrato == null}");
+                    
                     if (note1.NotePhoneInfo != null)
                     {
                         var info1 = note1.NotePhoneInfo;
