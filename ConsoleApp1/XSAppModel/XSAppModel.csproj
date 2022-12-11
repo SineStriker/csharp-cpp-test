@@ -20,13 +20,13 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <TargetPath>QNrbfFormat.dll</TargetPath>
         </ContentWithTargetPath>
-        <ContentWithTargetPath Include="Libs\Qt5Core.dll">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-            <TargetPath>Qt5Core.dll</TargetPath>
-        </ContentWithTargetPath>
+<!--        <ContentWithTargetPath Include="Libs\Qt5Core.dll">-->
+<!--            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>-->
+<!--            <TargetPath>Qt5Core.dll</TargetPath>-->
+<!--        </ContentWithTargetPath>-->
 
         <None Include="Libs\QNrbfFormat.dll" />
-        <None Include="Libs\Qt5Core.dll" />
+<!--        <None Include="Libs\Qt5Core.dll" />-->
     </ItemGroup>
 
 </Project>
